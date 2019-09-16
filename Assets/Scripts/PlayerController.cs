@@ -8,6 +8,8 @@ public class PlayerController : MonoBehaviour
     //Creates an instance variable to store the character controller
     private CharacterController characterController;
     public Rigidbody head;
+    public LayerMask layerMask;
+    private Vector3 currentLookTarget = Vector3.zero;
     // Start is called before the first frame update
     void Start()
     {
@@ -37,5 +39,25 @@ public class PlayerController : MonoBehaviour
             //Used to make the head move
             head.AddForce(transform.right * 150, ForceMode.Acceleration);
         }
+        //Creates an empty raycast when you get a hit
+        RaycastHit hit;
+        //Casts the ray from the camera to the mouse position
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        Debug.DrawRay(ray.origin, ray.direction * 1000, Color.green);
+        if (Physics.Raycast(ray, out hit, 1000, layerMask, 
+            QueryTriggerInteraction.Ignore))
+        {
+            if (hit.point != currentLookTarget)
+            {
+                currentLookTarget = hit.point;
+            }
+            Vector3 targetPosition = new Vector3(hit.point.x,    
+                transform.position.y, hit.point.z);
+            Quaternion rotation = Quaternion.LookRotation(targetPosition -    
+                transform.position);
+            transform.rotation = Quaternion.Lerp(transform.rotation,    
+                rotation, Time.deltaTime * 10.0f);
+        }
+
     }
 }
