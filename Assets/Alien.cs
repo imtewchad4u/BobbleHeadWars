@@ -53,17 +53,15 @@ public class Alien : MonoBehaviour
     {
         if (target != null)
         {
-            navigationTime += Time.deltaTime;
+            
             if (isAlive)
-            { 
-                //... 
-            }
-        
-
-            if (navigationTime > navigationUpdate)
             {
-                agent.destination = target.position; navigationTime = 0;
-            }
+                navigationTime += Time.deltaTime;
+                if (navigationTime > navigationUpdate)
+                {
+                    agent.destination = target.position; navigationTime = 0;
+                }
+            }           
         }
        
     }

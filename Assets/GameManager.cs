@@ -32,6 +32,7 @@ public class GameManager : MonoBehaviour
     private float actualUpgradeTime = 0;
     private float currentUpgradeTime = 0;
     public GameObject deathFloor;
+    public Animator arenaAnimator;
 
     // Start is called before the first frame update
     void Start()
@@ -108,8 +109,17 @@ public class GameManager : MonoBehaviour
             }
         }
     }
+
+    private void endGame()
+    { SoundManager.Instance.PlayOneShot(SoundManager.Instance.elevatorArrived);
+        arenaAnimator.SetTrigger("PlayerWon");
+    }
     public void AlienDestroyed()
     {
         aliensOnScreen -= 1; totalAliens -= 1;
+        if (totalAliens == 0)
+        {
+            Invoke("endGame", 2.0f);
+        }
     }
 }
